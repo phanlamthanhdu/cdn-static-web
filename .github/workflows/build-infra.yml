@@ -48,10 +48,18 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build Next.js app
-        run: |
+      - run: |
           cd src
           ls
+
+      - name: Create env file
+        run: |
+          cat <<EOF > .env.local
+          NEXT_PUBLIC_GITHUB_USERNAME=${{ secrets.NEXT_PUBLIC_GITHUB_USERNAME }}
+          EOF
+
+      - name: Build Next.js app
+        run: |
           npm install
           npm run build
 
