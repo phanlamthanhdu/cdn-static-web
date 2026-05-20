@@ -48,10 +48,12 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install Next.js
+        run: npm install
+
       - name: Build Next.js app
         run: |
           cd src
-          npm ci
           npm run build
 
       - run: ls
