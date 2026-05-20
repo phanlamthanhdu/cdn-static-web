@@ -59,7 +59,7 @@ jobs:
         working-directory: ./src
         run: |
           npm install
-          npm run dev
+          npm run build
 
       - run: ls
 
