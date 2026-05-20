@@ -43,6 +43,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
+      - name: Move to src
+        run: cd src
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -52,9 +55,7 @@ jobs:
         run: npm install
 
       - name: Build Next.js app
-        run: |
-          cd src
-          npm run build
+        run: npm run build
 
       - run: ls
 
