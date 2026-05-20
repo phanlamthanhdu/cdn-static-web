@@ -1,0 +1,65 @@
+name: Build & Deploy Static Web 
+
+on:
+  workflow_dispatch:
+
+  push:
+    branches:
+      - 'feature/**'
+
+env:
+  # AWS Login
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: ap-southeast-1
+
+jobs:
+  # build:
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout repo
+  #       uses: actions/checkout@v6
+
+  #     - name: Terraform folder
+  #       run: cd ./infra/aws # Change after add azure and gcp
+      
+  #     - name: Check format
+  #       run: terraform fmt -check -recursive
+      
+  #     - name: Terraform init
+  #       run: terraform init
+      
+  #     - name: Terraform plan
+  #       run: terraform plan # Change add -var and -output
+
+  #     - name: Terraform apply
+  #       run: terraform apply
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Build Next.js app
+        run: |
+          cd src
+          npm ci
+          npm run build
+
+      - run: ls
+
+      # - name: Deploy static files to S3
+      #   run: |
+      #     aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+
+      # - name: Invalidate CloudFront cache
+      #   run: |
+      #     aws cloudfront create-invalidation \
+      #       --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
+      #       --paths "/*"
