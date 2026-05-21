@@ -53,6 +53,10 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: ./portfolio-web
+
     steps:
       - name: Clone portfolio repo
         uses: actions/checkout@v4
@@ -66,12 +70,10 @@ jobs:
           node-version: 20
 
       - name: Create env file
-        working-directory: ./portfolio-web
         run: |
           echo "NEXT_PUBLIC_GITHUB_USERNAME=phanlamthanhdu" > .env.local
 
       - name: Build app
-        working-directory: ./portfolio-web
         run: |
           npm install
           npm run build
