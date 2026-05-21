@@ -21,15 +21,16 @@ jobs:
       cloudfront_distribution_id: ${{ steps.tf_outputs.outputs.cloudfront_distribution_id }}
       bucket_name: ${{ steps.tf_outputs.outputs.bucket_name }}
 
+    defaults:
+      run:
+        working-directory: ./infra/aws
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform folder
-        run: cd ./infra/aws # Change after add azure and gcp
       
       - name: Check format
         run: terraform fmt -check -recursive
