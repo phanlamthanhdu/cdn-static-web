@@ -14,29 +14,39 @@ env:
   AWS_DEFAULT_REGION: ap-southeast-1
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v6
+    outputs:
+      cloudfront_distribution_id: ${{ steps.tf_outputs.outputs.cloudfront_distribution_id }}
+      bucket_name: ${{ steps.tf_outputs.outputs.bucket_name }}
 
-  #     - name: Terraform folder
-  #       run: cd ./infra/aws # Change after add azure and gcp
-      
-  #     - name: Check format
-  #       run: terraform fmt -check -recursive
-      
-  #     - name: Terraform init
-  #       run: terraform init
-      
-  #     - name: Terraform plan
-  #       run: terraform plan # Change add -var and -output
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
 
-  #     - name: Terraform apply
-  #       run: terraform apply
+      - name: Terraform folder
+        run: cd ./infra/aws # Change after add azure and gcp
+      
+      - name: Check format
+        run: terraform fmt -check -recursive
+      
+      - name: Terraform init
+        run: terraform init
+
+      - name: Terraform apply
+        run: terraform apply -auto-approve
+
+      - name: Export Terraform Outputs
+        id: tf_outputs
+        run: |
+          echo "cloudfront_distribution_id=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_OUTPUT
+          echo "bucket_name=$(terraform output -raw bucket_name)" >> $GITHUB_OUTPUT
+    env:
+      TF_VAR_bucket_name: secrets.BUCKET_NAME
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
@@ -66,8 +76,8 @@ jobs:
         run: |
           aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
-      # - name: Invalidate CloudFront cache
-      #   run: |
-      #     aws cloudfront create-invalidation \
-      #       --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} \
-      #       --paths "/*"
+      - name: Invalidate CloudFront Cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ needs.terraform.outputs.cloudfront_distribution_id }} \
+            --paths "/*"
