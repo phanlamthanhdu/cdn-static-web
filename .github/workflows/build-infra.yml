@@ -25,6 +25,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
       - name: Terraform folder
         run: cd ./infra/aws # Change after add azure and gcp
       
