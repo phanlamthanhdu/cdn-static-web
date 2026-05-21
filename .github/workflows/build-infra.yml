@@ -40,8 +40,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v6
+      - name: Clone portfolio repo
+        uses: actions/checkout@v4
+        with:
+          repository: phanlamthanhdu/portfolio-web
+          path: portfolio-web
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -49,23 +52,19 @@ jobs:
           node-version: 20
 
       - name: Create env file
-        working-directory: ./src
+        working-directory: ./portfolio-web
         run: |
-          cat <<EOF > .env.local
-          NEXT_PUBLIC_GITHUB_USERNAME=itsnitinr
-          EOF
+          echo "NEXT_PUBLIC_GITHUB_USERNAME=phanlamthanhdu" > .env.local
 
-      - name: Build Next.js app
-        working-directory: ./src
+      - name: Build app
+        working-directory: ./portfolio-web
         run: |
           npm install
           npm run build
 
-      - run: ls ./src
-
-      # - name: Deploy static files to S3
-      #   run: |
-      #     aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
+      - name: Deploy static files to S3
+        run: |
+          aws s3 sync out/ s3://${{ secrets.S3_BUCKET_NAME }} --delete
 
       # - name: Invalidate CloudFront cache
       #   run: |
