@@ -47,7 +47,7 @@ jobs:
         id: tf_outputs
         run: |
           echo "cloudfront_distribution_id=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_OUTPUT
-          echo "bucket_name=$(terraform output -raw bucket_name)" >> $GITHUB_OUTPUT
+          echo "bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_OUTPUT
 
   deploy:
     needs: build
