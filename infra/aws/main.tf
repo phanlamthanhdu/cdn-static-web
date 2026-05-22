@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "cloudfront_s3_policy" {
 
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "s3-oac-${var.bucket_name}"
-  description                       = "OAC cho phép CloudFront truy cập S3 Private"
+  description                       = "OAC allows CloudFront to access S3 Private"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
