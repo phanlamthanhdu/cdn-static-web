@@ -30,7 +30,7 @@ jobs:
       TF_CLI_ARGS_init: >-
         -backend-config="bucket=${{ vars.STATE_STORAGE_NAME }}"
         -backend-config="key=${{ github.repository }}/aws-terraform.tfstate"
-        -backend-config="region=${{ vars.BACKEND_REGION != '' && vars.BACKEND_REGION || 'ap-southeast-1' }}""
+        -backend-config="region=${{ vars.BACKEND_REGION != '' && vars.BACKEND_REGION || 'ap-southeast-1' }}"
 
     steps:
       - name: Check state storage
