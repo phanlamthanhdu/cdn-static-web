@@ -27,7 +27,16 @@ jobs:
 
       TF_VAR_bucket_name: ${{ secrets.BUCKET_NAME }}
 
+      TF_CLI_ARGS_init: >-
+        -backend-config="bucket=${{ vars.STATE_STORAGE_NAME }}"
+        -backend-config="key=${{ github.repository }}/aws-terraform.tfstate"
+        -backend-config="region=${{ vars.BACKEND_REGION != '' && vars.BACKEND_REGION || 'ap-southeast-1' }}""
+
     steps:
+      - name: Check state storage
+        if: ${{ vars.STATE_STORAGE_NAME == '' }}
+        run: exit 1
+
       - name: Checkout repo
         uses: actions/checkout@v6
 
@@ -40,14 +49,14 @@ jobs:
       - name: Terraform init
         run: terraform init
 
-      # - name: Terraform apply
-      #   run: terraform apply -auto-approve
+      - name: Terraform apply
+        run: terraform apply -auto-approve
 
-      # - name: Export Terraform Outputs
-      #   id: tf_outputs
-      #   run: |
-      #     echo "cloudfront_distribution_id=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_OUTPUT
-      #     echo "bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_OUTPUT
+      - name: Export Terraform Outputs
+        id: tf_outputs
+        run: |
+          echo "cloudfront_distribution_id=$(terraform output -raw cloudfront_distribution_id)" >> $GITHUB_OUTPUT
+          echo "bucket_name=$(terraform output -raw s3_bucket_name)" >> $GITHUB_OUTPUT
 
   deploy:
     needs: build
