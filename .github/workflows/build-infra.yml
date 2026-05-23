@@ -3,10 +3,6 @@ name: Build & Deploy Static Web
 on:
   workflow_dispatch:
 
-  push:
-    branches:
-      - 'feature/**'
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,23 +33,20 @@ jobs:
         if: ${{ vars.STATE_STORAGE_NAME == '' }}
         run: exit 1
 
-      - name: Checkout repo
+      - name: Checkout Repo
         uses: actions/checkout@v6
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
       
-      - name: Check format
+      - name: Check Format
         run: terraform fmt -check -recursive
       
-      - name: Terraform init
+      - name: Terraform Init
         run: terraform init
 
-      - name: Terraform apply
+      - name: Terraform Apply
         run: terraform apply -auto-approve
-
-      - name: Terraform Outputs
-        run: terraform output
 
       - name: Export Terraform Outputs
         id: tf_outputs
@@ -67,7 +60,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./portfolio-web
+        working-directory: ./portfolio-website
 
     steps:
       - name: Clone portfolio repo
