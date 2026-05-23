@@ -1,4 +1,4 @@
-name: Build & Deploy Static Web 
+name: Build & Deploy Static Web on AWS
 
 on:
   workflow_dispatch:
@@ -69,6 +69,8 @@ jobs:
           repository: phanlamthanhdu/portfolio-website
           path: portfolio-website
 
+      - run: ls -a
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -82,6 +84,8 @@ jobs:
         run: |
           npm install
           npm run build
+
+      - run: ls -a
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
