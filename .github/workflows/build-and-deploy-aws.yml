@@ -68,6 +68,7 @@ jobs:
         with:
           repository: phanlamthanhdu/portfolio-website
           path: portfolio-website
+          ref: 'feature/customization'
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
