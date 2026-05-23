@@ -96,10 +96,10 @@ jobs:
 
       - name: Deploy static files to S3
         run: |
-          aws s3 sync out/ s3://${{ secrets.BUCKET_NAME }} --delete
+          aws s3 sync out/ s3://${{ needs.build.outputs.bucket_name }} --delete
 
       - name: Invalidate CloudFront Cache
         run: |
           aws cloudfront create-invalidation \
-            --distribution-id E1NFK35X4QM8H5 \
+            --distribution-id ${{ needs.build.outputs.cloudfront_distribution_id }} \
             --paths "/*"
