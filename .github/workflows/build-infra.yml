@@ -52,6 +52,9 @@ jobs:
       - name: Terraform apply
         run: terraform apply -auto-approve
 
+      - name: Terraform Outputs
+        run: terraform output
+
       - name: Export Terraform Outputs
         id: tf_outputs
         run: |
