@@ -70,15 +70,11 @@ jobs:
         working-directory: ./portfolio-web
 
     steps:
-      - run: |
-          echo ${{ needs.build.outputs.bucket_name }}
-          echo ${{ needs.build.outputs.cloudfront_distribution_id }}
-
       - name: Clone portfolio repo
         uses: actions/checkout@v4
         with:
-          repository: phanlamthanhdu/portfolio-web
-          path: portfolio-web
+          repository: phanlamthanhdu/portfolio-website
+          path: portfolio-website
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
