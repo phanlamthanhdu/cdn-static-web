@@ -55,6 +55,11 @@ jobs:
       - name: Terraform Outputs
         run: terraform output
 
+      - name: Terraform Outputs
+        run: |
+          terraform output -raw cloudfront_distribution_id
+          terraform output -raw s3_bucket_name
+
       - name: Export Terraform Outputs
         id: tf_outputs
         run: |
