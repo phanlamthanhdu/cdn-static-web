@@ -59,6 +59,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id                = "S3-${aws_s3_bucket.static_web.bucket}"
   }
 
+  aliases = [
+    "phanlamthanhdu-portfolio.click",
+  ]
+
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
@@ -90,7 +94,10 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    cloudfront_default_certificate = false
+    acm_certificate_arn            = "arn:aws:acm:us-east-1:720896546147:certificate/4d16abb9-8052-45c7-8c52-78f5c1e24757"
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2021"
   }
 
   custom_error_response {
