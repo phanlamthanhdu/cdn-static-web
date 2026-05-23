@@ -69,8 +69,6 @@ jobs:
           repository: phanlamthanhdu/portfolio-website
           path: portfolio-website
 
-      - run: ls -a
-      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -85,8 +83,6 @@ jobs:
           npm install
           npm run build
 
-      - run: ls -a
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -96,7 +92,7 @@ jobs:
 
       - name: Deploy static files to S3
         run: |
-          aws s3 sync out/ s3://${{ needs.build.outputs.bucket_name }} --delete
+          aws s3 sync dist/ s3://${{ needs.build.outputs.bucket_name }} --delete
 
       - name: Invalidate CloudFront Cache
         run: |
