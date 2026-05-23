@@ -6,13 +6,13 @@ variable "aws_region" {
 
 variable "bucket_name" {
   type        = string
-  description = "Tên duy nhất cho S3 bucket (Ví dụ: my-super-cool-web-12345)"
+  description = ""
 }
 
 variable "domain_name" {
   type        = string
   default     = ""
-  description = "Tên miền tùy chỉnh nếu có (Ví dụ: example.com). Để trống nếu dùng domain mặc định của CloudFront"
+  description = ""
 }
 
 # variable "s3" {
